@@ -7,6 +7,10 @@ import {
 import { TooltipProvider } from "@/components/ui/tooltip"
 import type { Metadata } from "next"
 
+// Prevent prerendering at build time - dashboard pages need DB access at runtime.
+// Vercel's build environment cannot reach the database (ENETUNREACH).
+export const dynamic = "force-dynamic"
+
 export const metadata: Metadata = {
   title: "BBM Admin Dashboard",
   description: "Admin dashboard for job postings and gallery",
