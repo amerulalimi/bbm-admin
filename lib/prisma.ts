@@ -11,11 +11,10 @@ if (!process.env.DATABASE_URL) {
 // Parse and normalize connection string
 let connectionString = process.env.DATABASE_URL
 
-// Debug: Log the connection string (hide password in production)
-if (process.env.NODE_ENV !== "production") {
-  const maskedUrl = connectionString.replace(/:[^:@]+@/, ":****@")
-  console.log("🔌 Using DATABASE_URL:", maskedUrl)
-}
+// Debug: Log the connection string (hide password)
+const maskedUrl = connectionString.replace(/:[^:@]+@/, ":****@")
+console.log("🔌 Using DATABASE_URL:", maskedUrl)
+console.log("🔌 Environment:", process.env.NODE_ENV || "development")
 
 // Fix double question marks (should use & for additional params)
 if (connectionString.includes("??")) {
@@ -45,15 +44,21 @@ if (!connectionString.includes("sslmode=")) {
 }
 
 // Debug: Show what connection string will be used
-if (process.env.NODE_ENV !== "production") {
-  const maskedUrl = connectionString.replace(/:[^:@]+@/, ":****@")
-  console.log("🔌 Final connection string:", maskedUrl)
-  console.log("🔌 Host:", connectionString.match(/@([^:/]+)/)?.[1] || "unknown")
-}
+const finalMaskedUrl = connectionString.replace(/:[^:@]+@/, ":****@")
+console.log("🔌 Final connection string:", finalMaskedUrl)
+console.log("🔌 Host:", connectionString.match(/@([^:/]+)/)?.[1] || "unknown")
+console.log("🔌 Has pgbouncer:", connectionString.includes("pgbouncer=true"))
+console.log("🔌 Has SSL:", connectionString.includes("sslmode="))
 
-const adapter = new PrismaPg({
-  connectionString: connectionString,
-})
+let adapter: PrismaPg
+try {
+  adapter = new PrismaPg({
+    connectionString: connectionString,
+  })
+} catch (error) {
+  console.error("❌ Failed to create Prisma adapter:", error)
+  throw error
+}
 
 // Clear cached Prisma client if DATABASE_URL changed (for development)
 if (process.env.NODE_ENV !== "production" && globalForPrisma.prisma) {
