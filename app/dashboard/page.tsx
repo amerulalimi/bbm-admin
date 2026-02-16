@@ -20,12 +20,14 @@ async function fetchDashboardData() {
     fetch(`${baseUrl}/api/gallery?limit=${LIST_LIMIT}`, { headers: { cookie } }),
   ])
 
-  const jobs: Jobs[] = jobsRes.ok ? await jobsRes.json() : []
+  const jobs: Jobs[] = jobsRes.ok 
+    ? await jobsRes.json().catch(() => []) 
+    : []
   const albums = albumsRes.ok
-    ? await albumsRes.json()
+    ? await albumsRes.json().catch(() => [])
     : []
   const images = imagesRes.ok
-    ? await imagesRes.json()
+    ? await imagesRes.json().catch(() => [])
     : []
 
   return { jobs, albums, images }

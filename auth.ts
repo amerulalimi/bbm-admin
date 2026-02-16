@@ -2,8 +2,14 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { getUserdb } from "./server/server";
 import NextAuth, { type NextAuthOptions } from "next-auth";
 
+const authSecret = process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET;
+
+if (!authSecret && process.env.NODE_ENV === "production") {
+  console.error("⚠️  AUTH_SECRET is not set! Authentication will fail in production.");
+}
+
 export const authOptions: NextAuthOptions = {
-  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
+  secret: authSecret,
   providers: [
     CredentialsProvider({
 
