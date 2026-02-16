@@ -10,24 +10,32 @@ export async function getUserdb(
         }
     })
     if(!user){
-        return null
+        return { user: null, isValid: false }
     }
 
-    // Debug logging (remove in production!)
-    console.log("🔐 Password check:", {
-      email,
-      passwordLength: password.length,
-      hashedPasswordPreview: user.password.substring(0, 20) + "...",
-      hashedPasswordLength: user.password.length,
-      userActive: user.active
-    })
+    // Debug logging (only in development)
+    if (process.env.NODE_ENV !== "production") {
+      console.log("🔐 Password check:", {
+        email,
+        passwordLength: password.length,
+        hashedPasswordPreview: user.password.substring(0, 20) + "...",
+        hashedPasswordLength: user.password.length,
+        userActive: user.active
+      })
+    }
     
     const isValid = await bcrypt.compare(password, user.password)
-    console.log("✅ Password match:", isValid)
     
-    if (!isValid) return null
+    // Only log failures in production (for debugging), never log passwords
+    if (!isValid && process.env.NODE_ENV === "production") {
+      console.log("❌ Authentication failed for:", email)
+    } else if (process.env.NODE_ENV !== "production") {
+      console.log("✅ Password match:", isValid)
+    }
+    
+    if (!isValid) return { user: null, isValid: false }
 
-    if (!user.active) return null
+    if (!user.active) return { user: null, isValid: false }
 
-    return user
+    return { user, isValid: true }
 }

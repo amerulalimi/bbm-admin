@@ -27,10 +27,13 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Invalid credentials")
         }
         
-        const user = await getUserdb(email, password);
+        const result = await getUserdb(email, password);
+        
+        // Log isValid in auth.ts
+        console.log("🔑 Auth result:", { email, isValid: result.isValid });
 
-        if (user) {
-          return { id: user.id, email: user.email, name: user.email };
+        if (result.user && result.isValid) {
+          return { id: result.user.id, email: result.user.email, name: result.user.email };
         }
         return null;
       }

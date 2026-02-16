@@ -21,6 +21,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import { error } from "console"
 
 export function LoginForm({
   className,
@@ -50,7 +51,7 @@ export function LoginForm({
       })
 
       if (result?.error) {
-        toast.error("Invalid email or password")
+        toast.error(`Invalid email or password | ${result.error}`)
         setLoading(false)
         return
       }
