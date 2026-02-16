@@ -3,6 +3,7 @@ import { getUserdb } from "./server/server";
 import NextAuth, { type NextAuthOptions } from "next-auth";
 
 export const authOptions: NextAuthOptions = {
+  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
   providers: [
     CredentialsProvider({
 
