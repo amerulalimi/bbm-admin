@@ -1,4 +1,4 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
+import { DeleteObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
 
 const endpoint = process.env.SUPABASE_S3_ENDPOINT ?? ""
 const region = process.env.SUPABASE_S3_REGION ?? "ap-southeast-2"
@@ -60,6 +60,27 @@ export async function uploadToStorage(
     return { success: true, publicUrl }
   } catch (err) {
     const message = err instanceof Error ? err.message : "Upload failed"
+    return { success: false, error: message }
+  }
+}
+
+/**
+ * Delete a file from Supabase Storage via S3-compatible API.
+ */
+export async function deleteFromStorage(path: string): Promise<{ success: boolean; error?: string }> {
+  if (!supabaseStorageS3) {
+    return { success: false, error: "S3 storage not configured" }
+  }
+  try {
+    await supabaseStorageS3.send(
+      new DeleteObjectCommand({
+        Bucket: SUPABASE_S3_BUCKET,
+        Key: path,
+      })
+    )
+    return { success: true }
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Delete failed"
     return { success: false, error: message }
   }
 }

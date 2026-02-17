@@ -2,11 +2,11 @@ import { getToken } from "next-auth/jwt"
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
-const publicPaths = ["/login", "/api/auth"]
-const adminPaths = ["/dashboard", "/api/jobs", "/api/dashboard", "/api/gallery", "/api/albums"]
+const publicPaths = ["/login"]
+const adminPaths = ["/dashboard"]
 
 function isPublicPath(pathname: string) {
-  return publicPaths.some((p) => pathname === p || pathname.startsWith("/api/auth"))
+  return publicPaths.some((p) => pathname === p )
 }
 
 function isAdminPath(pathname: string) {

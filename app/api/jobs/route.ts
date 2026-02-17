@@ -6,10 +6,10 @@ import { authOptions } from "@/auth"
 
 export async function GET(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-    }
+    // const session = await getServerSession(authOptions)
+    // if (!session?.user) {
+    //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    // }
 
     const { searchParams } = new URL(req.url)
     const limit = searchParams.get("limit")

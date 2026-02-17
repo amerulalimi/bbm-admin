@@ -1,0 +1,122 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Jobs API Response",
+  "description": "Response structure for GET /api/jobs endpoint",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [
+      "id",
+      "title",
+      "jobDescription",
+      "jobType",
+      "location",
+      "salary",
+      "postedDate",
+      "jobStatus",
+      "jobTime",
+      "active",
+      "createdAt",
+      "updatedAt",
+      "_count"
+    ],
+    "properties": {
+      "id": {
+        "type": "number",
+        "description": "Unique job identifier",
+        "example": 1
+      },
+      "title": {
+        "type": "string",
+        "description": "Job title",
+        "example": "Software Developer"
+      },
+      "jobDescription": {
+        "type": "string",
+        "description": "Full job description",
+        "example": "We are looking for a motivated software developer to join our team."
+      },
+      "jobType": {
+        "type": "string",
+        "description": "Job type",
+        "enum": ["Permanent", "Contract", "Internship", "Full-time", "Part-time"],
+        "example": "Permanent"
+      },
+      "location": {
+        "type": "string",
+        "description": "Job location",
+        "example": "Kuala Lumpur"
+      },
+      "salary": {
+        "type": "number",
+        "description": "Salary amount",
+        "example": 6000
+      },
+      "postedDate": {
+        "type": "string",
+        "format": "date-time",
+        "description": "ISO 8601 date string when job was posted",
+        "example": "2024-10-17T10:00:00.000Z"
+      },
+      "jobStatus": {
+        "type": "string",
+        "description": "Job status",
+        "enum": ["published", "draft", "closed"],
+        "example": "published"
+      },
+      "jobTime": {
+        "type": "string",
+        "description": "Job time",
+        "example": "Full-time"
+      },
+      "active": {
+        "type": "boolean",
+        "description": "Whether the job is active",
+        "example": true
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "date-time",
+        "description": "ISO 8601 date string when record was created",
+        "example": "2024-10-17T10:00:00.000Z"
+      },
+      "updatedAt": {
+        "type": "string",
+        "format": "date-time",
+        "description": "ISO 8601 date string when record was last updated",
+        "example": "2024-10-17T10:00:00.000Z"
+      },
+      "_count": {
+        "type": "object",
+        "description": "Count of related records",
+        "required": ["applications"],
+        "properties": {
+          "applications": {
+            "type": "number",
+            "description": "Number of applications for this job",
+            "example": 5
+          }
+        }
+      }
+    }
+  },
+  "example": [
+    {
+      "id": 1,
+      "title": "Software Developer",
+      "jobDescription": "We are looking for a motivated software developer to join our team. You will work on building and maintaining web applications.",
+      "jobType": "Permanent",
+      "location": "Kuala Lumpur",
+      "salary": 6000,
+      "postedDate": "2024-10-17T10:00:00.000Z",
+      "jobStatus": "published",
+      "jobTime": "Full-time",
+      "active": true,
+      "createdAt": "2024-10-17T10:00:00.000Z",
+      "updatedAt": "2024-10-17T10:00:00.000Z",
+      "_count": {
+        "applications": 5
+      }
+    }
+  ]
+}
