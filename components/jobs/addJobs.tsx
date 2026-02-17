@@ -63,7 +63,7 @@ export default function AddJobs() {
     defaultValues: {
       title: "",
       jobDescription: "",
-      jobType: "Full-time" as CreateJobInput["jobType"],
+      jobType: "Permanent" as CreateJobInput["jobType"],
       location: "",
       salary: 0,
       jobTime: "",
@@ -255,9 +255,9 @@ export default function AddJobs() {
                 }
                 onBlur={field.handleBlur}
               >
-                <option value="Full-time">Full-time</option>
+                <option value="Permanent">Permanent</option>
                 <option value="Part-time">Part-time</option>
-                <option value="Contract">Contract</option>
+                <option value="Internship">Internship</option>
               </select>
             </div>
           )}

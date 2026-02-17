@@ -24,7 +24,7 @@ export type Jobs = {
   no?: number
   title: string
   jobDescription: string
-  jobType: "Full-time" | "Part-time" | "Contract"
+  jobType: "Permanent" | "Part-time" | "Internship"
   location: string
   salary: number
   postedDate: string

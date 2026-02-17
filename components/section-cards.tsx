@@ -30,6 +30,7 @@ export function SectionCards() {
         if (res.ok) {
           const data = await res.json()
           setStats(data)
+          console.log(data)
         } else {
           setStats({
             totalJobs: 0,

@@ -13,10 +13,10 @@ export async function GET() {
     const [totalJobs, publishedJobs, draftJobs, closedJobs] = await Promise.all([
       prisma.job.count(),
       prisma.job.count({
-        where: { jobStatus: { in: ["Open", "open", "published"] } },
+        where: { jobStatus: "published" },
       }),
-      prisma.job.count({ where: { jobStatus: "Draft" } }),
-      prisma.job.count({ where: { jobStatus: { in: ["closed", "Closed"] } } }),
+      prisma.job.count({ where: { jobStatus: "draft" } }),
+      prisma.job.count({ where: { jobStatus: "closed" } }),
     ]);
 
     return NextResponse.json({

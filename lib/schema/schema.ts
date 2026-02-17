@@ -38,7 +38,7 @@ export type JobStatus = z.infer<typeof jobStatusEnum>
 export const createJobSchema = z.object({
   title: z.string().min(3),
   jobDescription: z.string().min(1),
-  jobType: z.enum(["Full-time", "Part-time", "Contract"]),
+  jobType: z.enum(["Permanent", "Part-time", "Internship"]),
   location: z.string().min(1),
   salary: z.union([z.number(), z.string()]).transform((v) => Number(v)),
   jobTime: z.string().min(1),

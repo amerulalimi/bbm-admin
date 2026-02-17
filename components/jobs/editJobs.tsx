@@ -75,10 +75,10 @@ export default function EditJobs({ job }: Props) {
   return (
     <div className="max-w-2xl space-y-4">
       <form
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault()
           e.stopPropagation()
-          form.handleSubmit()
+          await form.handleSubmit()
         }}
         className="space-y-4"
       >
@@ -221,9 +221,9 @@ export default function EditJobs({ job }: Props) {
                 }
                 onBlur={field.handleBlur}
               >
-                <option value="Full-time">Full-time</option>
+                <option value="Permanent">Permanent</option>
                 <option value="Part-time">Part-time</option>
-                <option value="Contract">Contract</option>
+                <option value="Internship">Internship</option>
               </select>
             </div>
           )}
