@@ -1,36 +1,148 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# BBM Admin Dashboard
+
+Admin dashboard for managing job postings and gallery/albums. Built with Next.js, React, Prisma, and Supabase.
+
+## Features
+
+- **Dashboard** – Overview with job stats (total, published, draft, closed), charts, and recent activity (jobs, albums, images)
+- **Job Postings** – Create, edit, delete jobs; manage status (published/draft/closed); job types (Permanent, Part-time, Internship)
+- **Gallery** – Manage albums and images; upload, delete (single/bulk); set album cover images; edit album name/description
+- **Settings** – Change password, create admins
+- **Authentication** – NextAuth with credentials; protected dashboard routes
+
+## Tech Stack
+
+- **Framework:** Next.js 16 (App Router), React 19
+- **Database:** PostgreSQL with Prisma ORM
+- **Auth:** NextAuth.js (Credentials Provider)
+- **Storage:** Supabase (S3-compatible API or REST) for images
+- **UI:** Tailwind CSS, Radix UI, shadcn components, TanStack Form & Table, Recharts
+- **Validation:** Zod
+
+## Project Structure
+
+```
+bbm-admin-dashboard/
+├── app/
+│   ├── api/                    # API routes
+│   │   ├── admins/             # Admin CRUD
+│   │   ├── albums/             # Album CRUD, PATCH/DELETE by id
+│   │   ├── auth/               # NextAuth handler
+│   │   ├── dashboard/          # Stats, jobs-by-date
+│   │   ├── gallery/            # Images GET/DELETE, upload
+│   │   ├── jobs/               # Job CRUD
+│   │   └── settings/           # Change password
+│   ├── dashboard/              # Protected dashboard pages
+│   │   ├── admins/
+│   │   ├── gallery/
+│   │   ├── job-postings/
+│   │   └── settings/
+│   ├── layout.tsx
+│   └── page.tsx
+├── components/
+│   ├── jobs/                   # addJobs, editJobs, data-table, columns
+│   ├── dashboard/              # sectionCard
+│   ├── ui/                     # shadcn components
+│   └── ...
+├── lib/
+│   ├── prisma.ts               # Prisma client (pg adapter)
+│   ├── schema/                 # Zod schemas
+│   ├── supabase.ts
+│   └── supabase-storage-s3.ts  # S3-compatible upload/delete
+├── prisma/
+│   ├── schema.prisma           # Admin, Job, JobApplication, Album, Image
+│   ├── migrations/
+│   ├── seed.ts                 # Seed 12 jobs
+│   └── prisma.config.ts
+├── auth.ts                     # NextAuth config
+└── providers/
+```
+
+## Database Models (Prisma)
+
+| Model | Description |
+|-------|-------------|
+| **Admin** | Dashboard admins (email, password, active) |
+| **Job** | Job postings (title, description, jobType, location, salary, jobStatus, jobTime) |
+| **JobApplication** | Applications for jobs |
+| **Album** | Image albums (name, description, coverUrl) |
+| **Image** | Images (url, path, filename; optional albumId) |
+
+## API Overview
+
+| Endpoint | Methods | Description |
+|----------|---------|-------------|
+| `/api/jobs` | GET, POST | List/create jobs |
+| `/api/jobs/[id]` | GET, PATCH, DELETE | Job by id |
+| `/api/albums` | GET, POST | List/create albums |
+| `/api/albums/[id]` | PATCH, DELETE | Update/delete album |
+| `/api/gallery` | GET, DELETE | Images (optional `?albumId=`) |
+| `/api/gallery/upload` | POST | Upload image (FormData) |
+| `/api/dashboard/stats` | GET | Job counts (total, published, draft, closed) |
+| `/api/admins` | GET, POST | List/create admins |
+| `/api/admins/[id]` | PATCH, DELETE | Update/delete admin |
+| `/api/settings/change-password` | POST | Change password |
+| `/api/auth/[...nextauth]` | * | NextAuth handler |
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Node.js 20+
+- PostgreSQL database
+- Supabase project (for image storage)
+
+### Environment Variables
+
+Create `.env` in the project root:
+
+```env
+# Database (required)
+DATABASE_URL="postgresql://user:password@host:port/db?sslmode=require"
+
+# NextAuth
+NEXTAUTH_SECRET="your-secret"
+NEXTAUTH_URL="http://localhost:3000"
+
+# Supabase (for gallery image storage)
+NEXT_PUBLIC_SUPABASE_URL="https://xxx.supabase.co"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="your-anon-key"
+
+# Optional: S3-compatible storage (Supabase)
+SUPABASE_S3_ENDPOINT="https://xxx.supabase.co/storage/v1/s3"
+SUPABASE_S3_REGION="ap-southeast-2"
+SUPABASE_S3_ACCESS_KEY_ID=""
+SUPABASE_S3_SECRET_ACCESS_KEY=""
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Install & Run
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm install
+npx prisma migrate dev   # Run migrations
+npx prisma db seed       # Seed 12 sample jobs (optional)
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Open [http://localhost:3000](http://localhost:3000).
 
-## Learn More
+### Build
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run build
+npm start
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Scripts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm start` | Start production server |
+| `npx prisma db seed` | Seed database with sample jobs |
 
-## Deploy on Vercel
+## Related Documentation
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Jobs API response structure](./types/jobs-api.ts)
+- [Albums & Gallery API structure](./docs/albums-gallery-api.md)
