@@ -21,13 +21,6 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { Info } from "lucide-react"
 
 export function LoginForm({
   className,
@@ -78,33 +71,15 @@ export function LoginForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
-          <div className="flex items-center gap-1.5">
-            <CardTitle>Login to your account</CardTitle>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
-                    className="inline-flex text-muted-foreground hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-full p-0.5"
-                    aria-label="Demo credentials"
-                  >
-                    <Info className="size-4" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="bottom" className="max-w-[220px]">
-                  <p className="font-medium mb-1.5">Demo credentials</p>
-                  <p className="text-[11px]">
-                    Email: test@test.com
-                    <br />
-                    Password: Senario@123
-                  </p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
+          <CardTitle>Login to your account</CardTitle>
           <CardDescription>
             Enter your email and password to access the admin dashboard
           </CardDescription>
+          <div className="mt-3 rounded-md bg-muted/60 px-3 py-2 text-sm text-muted-foreground">
+            <p className="font-medium text-foreground mb-1">Demo credentials</p>
+            <p>Email: test@test.com</p>
+            <p>Password: Senario@123</p>
+          </div>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit}>
